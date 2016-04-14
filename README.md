@@ -4,7 +4,7 @@ Modification required to:
 * VisualCollapsible
 * SlackBot
 
-onPageContentSave should be prepended with:
+onPageContentSave and onArticleDelete should be prepended with:
 
 ```php
 if( defined('MW_PHPUNIT_TEST') ) { return true; }
