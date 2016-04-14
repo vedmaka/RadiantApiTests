@@ -6,6 +6,6 @@ Modification required to:
 
 onPageContentSave should be prepended with:
 
-```
+```php
 if( defined('MW_PHPUNIT_TEST') ) { return true; }
 ```
