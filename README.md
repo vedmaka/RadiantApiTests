@@ -1,8 +1,8 @@
 Modification required to:
 
-# TemplateData
-# VisualCollapsible
-# SlackBot
+* TemplateData
+* VisualCollapsible
+* SlackBot
 
 onPageContentSave should be prepended with:
 
