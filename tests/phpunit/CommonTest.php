@@ -27,6 +27,7 @@ class RadiantAPICommonTest extends ApiTestCase
                 'action' => 'radiant'
             )
         );
+        $this->assertArrayNotHasKey( 'error', $data[0] );
     }
 
 }

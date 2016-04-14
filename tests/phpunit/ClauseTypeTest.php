@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Class RadiantAPIChecklistTest
+ * Class RadiantAPIClauseTypeTest
  * @group medium
  * @group API
  */
-class RadiantAPIChecklistTest extends ApiTestCase
+class RadiantAPIClauseTypeTest extends ApiTestCase
 {
-    protected static $_checklistId;
+    protected static $_clausetypeId;
 
     protected function setUp()
     {
@@ -34,36 +34,35 @@ class RadiantAPIChecklistTest extends ApiTestCase
     public function addDBData()
     {
 
-        if ( Title::newFromText( 'Checklist', NS_TEMPLATE )->exists() ) {
+        if ( Title::newFromText( 'Clause type', NS_TEMPLATE )->exists() ) {
             return;
         }
 
-        $title = Title::newFromText( "Checklist", NS_TEMPLATE );
+        $title = Title::newFromText( "Clause type", NS_TEMPLATE );
 
         $user = User::newFromName( 'UTSysop' );
         $comment = __METHOD__ . ': Sample page for unit test.';
 
         $page = WikiPage::factory( $title );
         $page->doEditContent( ContentHandler::makeContent(
-            " [[Category:Checklist]]"
+            " [[Category:Clause type]]"
             , $title ), $comment, 0, false, $user );
 
-        $result = $this->insertPage( "UTChecklist", "{{Checklist||Checklist name=UTChecklist||Checklist items=* Test item 1}}" );
+        $result = $this->insertPage( "UTClauseType", "{{Clause_type}}" );
 
-        self::$_checklistId = $result['id'];
+        self::$_clausetypeId = $result['id'];
 
     }
 
     /**
-     * Tests checklist listing
-     * @covers RadiantApiEndpoint::action_checklist_get
+     * @covers RadiantApiEndpoint::action_clausetype_get
      */
-    public function testChecklistGet()
+    public function testClauseTypeGet()
     {
         $data = $this->doApiRequest(
             array(
                 'action' => 'radiant',
-                'method' => 'checklist/get'
+                'method' => 'clausetype/get'
             )
         );
 
@@ -71,19 +70,18 @@ class RadiantAPIChecklistTest extends ApiTestCase
         $this->assertArrayHasKey( 'radiant', $data[0] );
         $this->assertArrayHasKey( 'items', $data[0]['radiant'] );
         $this->assertEquals( 1, count($data[0]['radiant']['items']) );
-        $this->assertEquals( 'UTChecklist', $data[0]['radiant']['items'][0]['title'] );
+        $this->assertEquals( 'UTClauseType', $data[0]['radiant']['items'][0]['title'] );
     }
 
     /**
-     * Tests querying of one checklist item
-     * @covers RadiantApiEndpoint::action_checklist_get
+     * @covers RadiantApiEndpoint::action_clausetype_get
      */
-    public function testChecklistGetOne()
+    public function testClauseTypeGetOne()
     {
         $data = $this->doApiRequest(
             array(
                 'action' => 'radiant',
-                'method' => 'checklist/get/'.self::$_checklistId
+                'method' => 'clausetype/get/'.self::$_clausetypeId
             )
         );
 
@@ -92,46 +90,22 @@ class RadiantAPIChecklistTest extends ApiTestCase
         $this->assertArrayHasKey( 'items_count', $data[0]['radiant'] );
         $this->assertArrayHasKey( 'items', $data[0]['radiant'] );
         $this->assertEquals( 1, (int)$data[0]['radiant']['items_count'] );
-        $this->assertEquals( 'UTChecklist', $data[0]['radiant']['items'][0]['title'] );
+        $this->assertEquals( 'UTClauseType', $data[0]['radiant']['items'][0]['title'] );
 
     }
 
     /**
-     * Tests checklist creation
-     * @covers RadiantApiEndpoint::action_checklist_put
+     * @covers RadiantApiEndpoint::action_clausetype_put
      */
-    public function testChecklistPut()
+    public function testClauseTypePut()
     {
 
         $data = $this->doApiRequest(
             array(
                 'action' => 'radiant',
-                'method' => 'checklist/put',
-                'data' => '{"Checklist name": "UTChecklist2", "Checklist items": "* Item 1"}',
-                'title' => "UTChecklist2"
-            )
-        );
-
-        $this->assertArrayNotHasKey( 'error', $data[0] );
-        $this->assertArrayHasKey( 'radiant', $data[0] );
-        $this->assertArrayHasKey( 'status', $data[0]['radiant'] );
-        $this->assertEquals( 'success', $data[0]['radiant']['status'] );
-        $this->assertArrayHasKey( 'touched_unix', $data[0]['radiant'] );
-
-    }
-
-
-    /**
-     * @covers RadiantApiEndpoint::action_clause_put
-     */
-    public function testChecklistEdit()
-    {
-
-        $data = $this->doApiRequest(
-            array(
-                'action' => 'radiant',
-                'method' => 'checklist/put/'.self::$_checklistId,
-                'data' => '{"Checklist name": "UTChecklist_edited", "Checklist items": "* Item 1_edited"}'
+                'method' => 'clausetype/put',
+                'data' => '{"Random field": "Random value"}',
+                'title' => "UTClauseType2"
             )
         );
 
@@ -144,35 +118,39 @@ class RadiantAPIChecklistTest extends ApiTestCase
     }
 
     /**
-     * Verify proper error handling
-     * @coversNothing
+     * @covers RadiantApiEndpoint::action_clausetype_put
      */
-    public function testChecklistError()
+    public function testClauseTypeEdit()
     {
+
         $data = $this->doApiRequest(
             array(
                 'action' => 'radiant',
-                'method' => 'checklist/get/-1'
+                'method' => 'clausetype/put/'.self::$_clausetypeId,
+                'data' => '{"Random field": "Random value 123"}',
             )
         );
 
-        $this->assertArrayHasKey( 'error', $data[0] );
-        $this->assertEquals( 'unknown_title', $data[0]['error']['code'] );
+        $this->assertArrayNotHasKey( 'error', $data[0] );
+        $this->assertArrayHasKey( 'radiant', $data[0] );
+        $this->assertArrayHasKey( 'status', $data[0]['radiant'] );
+        $this->assertEquals( 'success', $data[0]['radiant']['status'] );
+        $this->assertArrayHasKey( 'touched_unix', $data[0]['radiant'] );
 
     }
 
     /**
-     * @covers RadiantApiEndpoint::action_checklist_delete
+     * @covers RadiantApiEndpoint::action_clausetype_delete
      */
-    public function testChecklistDelete()
+    public function testClauseDelete()
     {
         $data = $this->doApiRequest(
             array(
                 'action' => 'radiant',
-                'method' => 'checklist/delete/'.self::$_checklistId
+                'method' => 'clausetype/delete/'.self::$_clausetypeId
             )
         );
-        $this->assertEquals( null, Title::newFromID( self::$_checklistId ) );
+        $this->assertEquals( null, Title::newFromID( self::$_clausetypeId ) );
     }
 
 }
