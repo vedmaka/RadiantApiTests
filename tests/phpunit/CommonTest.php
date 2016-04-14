@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Class RadiantAPICommonTest
+ * @group medium
+ */
 class RadiantAPICommonTest extends ApiTestCase
 {
     protected function setUp()
@@ -13,6 +17,9 @@ class RadiantAPICommonTest extends ApiTestCase
         parent::tearDown();
     }
 
+    /**
+     * @expectedException UsageException
+     */
     public function testApiSetup()
     {
         $data = $this->doApiRequest(

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Colors don't work on Windows!
+phpunit.php enables colors for other OSs at runtime
+-->
+<phpunit bootstrap="./bootstrap.php"
+         colors="false"
+         backupGlobals="false"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="false"
+         convertWarningsToExceptions="false"
+         forceCoversAnnotation="true"
+         stopOnFailure="false"
+         timeoutForSmallTests="10"
+         timeoutForMediumTests="30"
+         timeoutForLargeTests="60"
+         strict="false"
+         verbose="true"
+         beStrictAboutOutputDuringTests="false"
+>
+    <testsuites>
+        <testsuite name="includes">
+            <directory>includes</directory>
+        </testsuite>
+        <testsuite name="languages">
+            <directory>languages</directory>
+        </testsuite>
+        <testsuite name="skins">
+            <directory>skins</directory>
+        </testsuite>
+        <!-- As there is a class Maintenance, we cannot use the
+             name "maintenance" directly -->
+        <testsuite name="maintenance_suite">
+            <directory>maintenance</directory>
+        </testsuite>
+        <testsuite name="structure">
+            <directory>structure</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
