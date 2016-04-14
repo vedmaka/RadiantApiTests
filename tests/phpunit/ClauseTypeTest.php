@@ -116,7 +116,7 @@ class RadiantAPIClauseTypeTest extends ApiTestCase
         $this->assertArrayHasKey( 'touched_unix', $data[0]['radiant'] );
 
     }
-
+    
     /**
      * @covers RadiantApiEndpoint::action_clausetype_put
      */
