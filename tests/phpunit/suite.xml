@@ -4,7 +4,7 @@
 Colors don't work on Windows!
 phpunit.php enables colors for other OSs at runtime
 -->
-<phpunit bootstrap="../../tests/phpunit/bootstrap.php"
+<phpunit bootstrap="../../../../tests/phpunit/bootstrap.php"
          colors="false"
          backupGlobals="false"
          convertErrorsToExceptions="true"
