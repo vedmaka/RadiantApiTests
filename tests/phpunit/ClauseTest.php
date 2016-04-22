@@ -197,5 +197,77 @@ class RadiantAPIClauseTest extends ApiTestCase {
         );
         $this->assertEquals( null, Title::newFromID( self::$_clauseId ) );
     }
-    
+
+    public function testClauseActionStatusNew()
+    {
+        $data = $this->doApiRequest(
+            array(
+                'action' => 'radiant',
+                'method' => 'clause/put',
+                'data' => '{"Clause type": "Sample clause type", "Bias": "Lorem ipsum lorem ipsum"}',
+                'title' => "UTClause3",
+                'content' => 'Reproduce wihtout peace, and we won’t avoid a queen.',
+                'terms' => '[ { "Term": "Sample term 1", "Definition": "This is sample definition 1" } ]'
+            )
+        );
+
+        // Ensure we have 'new' action value
+        $this->assertArrayHasKey( 'action', $data[0]['radiant'] );
+        $this->assertEquals( 'new', $data[0]['radiant']['action'] );
+
+        // Ensure we have 'new' action value for content
+        $this->assertArrayHasKey( 'content', $data[0]['radiant'] );
+        $this->assertArrayHasKey( 'action', $data[0]['radiant']['content'] );
+        $this->assertEquals( 'new', $data[0]['radiant']['content']['action'] );
+
+        self::$_clauseId = $data[0]['radiant']['page_id'];
+
+    }
+
+    public function testClauseActionStatusUpdateOnPropertiesEdit()
+    {
+        $data = $this->doApiRequest(
+            array(
+                'action' => 'radiant',
+                'method' => 'clause/put/' . self::$_clauseId,
+                'data' => '{"Clause type": "Sample clause type 123", "Bias": "Lorem ipsum lorem ipsum 123"}',
+                'content' => 'Reproduce wihtout peace, and we won’t avoid a queen.',
+                'terms' => '[ { "Term": "Sample term 1", "Definition": "This is sample definition 1" } ]'
+            )
+        );
+
+        // Ensure we have 'new' action value
+        $this->assertArrayHasKey( 'action', $data[0]['radiant'] );
+        $this->assertEquals( 'update', $data[0]['radiant']['action'] );
+
+        // Ensure we have 'new' action value for content
+        $this->assertArrayHasKey( 'content', $data[0]['radiant'] );
+        $this->assertArrayHasKey( 'action', $data[0]['radiant']['content'] );
+        $this->assertEquals( 'nothing', $data[0]['radiant']['content']['action'] );
+
+    }
+
+    public function testClauseActionStatusUpdateOnContentEdit()
+    {
+        $data = $this->doApiRequest(
+            array(
+                'action' => 'radiant',
+                'method' => 'clause/put/' . self::$_clauseId,
+                'data' => '{"Clause type": "Sample clause type 123", "Bias": "Lorem ipsum lorem ipsum 123"}',
+                'content' => 'Reproduce wihtout peace, and we won’t avoid a queen. 123',
+                'terms' => '[ { "Term": "Sample term 1", "Definition": "This is sample definition 1" } ]'
+            )
+        );
+
+        // Ensure we have 'new' action value
+        $this->assertArrayHasKey( 'action', $data[0]['radiant'] );
+        $this->assertEquals( 'nothing', $data[0]['radiant']['action'] );
+
+        // Ensure we have 'new' action value for content
+        $this->assertArrayHasKey( 'content', $data[0]['radiant'] );
+        $this->assertArrayHasKey( 'action', $data[0]['radiant']['content'] );
+        $this->assertEquals( 'update', $data[0]['radiant']['content']['action'] );
+
+    }
+
 }
