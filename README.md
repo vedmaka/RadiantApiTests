@@ -1,3 +1,5 @@
+This extension provides tests set for RadiantApi extension.
+
 Modification required to:
 
 * TemplateData
