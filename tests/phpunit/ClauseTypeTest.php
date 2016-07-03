@@ -2,6 +2,7 @@
 
 /**
  * Class RadiantAPIClauseTypeTest
+ * @group Database
  * @group medium
  * @group API
  */

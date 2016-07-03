@@ -2,6 +2,7 @@
 
 /**
  * Class RadiantAPIChecklistTest
+ * @group Database
  * @group medium
  * @group API
  */
